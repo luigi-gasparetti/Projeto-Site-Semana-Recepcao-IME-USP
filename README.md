@@ -4,3 +4,5 @@ Fazer um site voltado à organização da semana de recepção no IME. O site at
 A funcionalidade mais interessante do site seria a organização dos membros da comissão em relação às atividades da semana e o cálculo das horas de trabalho. Atualmente, a divisão de trabalho é feita à partir de planilhas no Excel, em que qualquer um com acesso a esse Excel editar as informações contidas nele e possivelmente ganhar horas complementares em cima disso. O site poderia fornecer uma forma mais segura através do uso de bancos de dados para a validação desses processos. 
 
 Além da maior segurança, o site também ajudará na organização mais generalizada da semana de recepção, providenciando aos calouros um cronograma completo das atividades da semana. Além do cronograma, toda atividade listada contará tanto com suas informações essenciais como local e horário quanto com uma descrição do que se trata aquela atividade.
+
+## LER ARQUIVO CICLOS.md ##
