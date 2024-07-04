@@ -19,6 +19,7 @@ enum class DiaDaSemana(val nome: String) {
 open class Evento(
     val titulo: String,
     val descricao: String,
+    val id: Int,
     val duracao: Int, // duração em minutos
     val horarioInicio: String,
     val horarioTermino: String,
@@ -33,7 +34,7 @@ open class Evento(
     }
 
     override fun toString(): String {
-        return "Evento(titulo='$titulo', descricao='$descricao', duracao=$duracao, horarioInicio=$horarioInicio, horarioTermino=$horarioTermino, diaDaSemana=$diaDaSemana, membros=${membros.map { it.nome }})"
+        return "Evento(titulo='$titulo', descricao='$descricao', id='$id',duracao=$duracao, horarioInicio=$horarioInicio, horarioTermino=$horarioTermino, diaDaSemana=$diaDaSemana, membros=${membros.map { it.nome }})"
     }
 }
 
@@ -72,6 +73,7 @@ fun main() {
     val evento1 = Evento(
         titulo = "Reunião de Planejamento",
         descricao = "Discussão sobre planejamento semanal",
+        id = 1,
         duracao = 90,
         horarioInicio = "09:00",
         horarioTermino = "10:30",
