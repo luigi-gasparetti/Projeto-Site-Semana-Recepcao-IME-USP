@@ -15,12 +15,13 @@ enum class DiaDaSemana(val nome: String) {
     }
 }
 
+@Serializable
 open class Evento(
     val titulo: String,
     val descricao: String,
     val duracao: Int, // duração em minutos
-    val horarioInicio: LocalTime,
-    val horarioTermino: LocalTime,
+    val horarioInicio: String,
+    val horarioTermino: String,
     val diaDaSemana: DiaDaSemana,
     var membros: List<Membro>
 ) {
@@ -36,6 +37,7 @@ open class Evento(
     }
 }
 
+@Serializable
 open class Membro(
     val nome: String, // nome do membro
     val id: Int,
@@ -46,7 +48,12 @@ open class Membro(
         if (!eventos.contains(evento)) {
             eventos = eventos + evento
             evento.adicionarMembro(this)
+            this.adicionarTrabalho(evento.duracao)
         }
+    }
+
+    fun adicionarTrabalho(minutos: Int){
+        this.trabalho = this.trabalho + minutos
     }
 
     override fun toString(): String {
@@ -57,17 +64,17 @@ open class Membro(
 
 fun main() {
     // Criando alguns membros sem eventos inicialmente
-    val joao = Membro(nome = "João", id = 1, trabalho = 480, eventos = emptyList()) // 8 horas
-    val maria = Membro(nome = "Maria", id = 2, trabalho = 300, eventos = emptyList()) // 5 horas
-    val carlos = Membro(nome = "Carlos", id = 3, trabalho = 600, eventos = emptyList()) // 10 horas
+    val joao = Membro(nome = "João", id = 1, trabalho = 0, eventos = emptyList()) // 8 horas
+    val maria = Membro(nome = "Maria", id = 2, trabalho = 0, eventos = emptyList()) // 5 horas
+    val carlos = Membro(nome = "Carlos", id = 3, trabalho = 0, eventos = emptyList()) // 10 horas
 
     // Criando um evento com esses membros
     val evento1 = Evento(
         titulo = "Reunião de Planejamento",
         descricao = "Discussão sobre planejamento semanal",
         duracao = 90,
-        horarioInicio = LocalTime.of(9, 0),
-        horarioTermino = LocalTime.of(10, 30),
+        horarioInicio = "09:00",
+        horarioTermino = "10:30",
         diaDaSemana = DiaDaSemana.SEGUNDA,
         membros = emptyList()
     )

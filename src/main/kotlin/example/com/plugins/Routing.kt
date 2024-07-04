@@ -7,12 +7,10 @@ import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     routing {
+        staticResources("static", "static")
+
         get("/") {
         call.respondRedirect("/static/index.html")
-        }
-        // Static plugin. Try to access `/static/index.html`
-        static("/static") {
-            resources("static")
         }
     }
 }
