@@ -1,5 +1,6 @@
 package example.com
 
+import kotlinx.serialization.Serializable
 import java.time.LocalTime
 
 enum class DiaDaSemana(val nome: String) {
@@ -14,22 +15,45 @@ enum class DiaDaSemana(val nome: String) {
     }
 }
 
-data class Evento(
+open class Evento(
     val titulo: String,
     val descricao: String,
     val duracao: Int, // duração em minutos
     val horarioInicio: LocalTime,
     val horarioTermino: LocalTime,
     val diaDaSemana: DiaDaSemana,
-    val membros: List<Membro>
-)
+    var membros: List<Membro>
+) {
+    fun adicionarMembro(membro: Membro) {
+        if (!membros.contains(membro)) {
+            membros = membros + membro
+            membro.adicionarEvento(this)
+        }
+    }
 
-data class Membro(
+    override fun toString(): String {
+        return "Evento(titulo='$titulo', descricao='$descricao', duracao=$duracao, horarioInicio=$horarioInicio, horarioTermino=$horarioTermino, diaDaSemana=$diaDaSemana, membros=${membros.map { it.nome }})"
+    }
+}
+
+open class Membro(
     val nome: String, // nome do membro
     val id: Int,
-    val trabalho: Int, // duração de horas trabalhadas em minutos
-    val eventos: List<Evento>
-)
+    var trabalho: Int, // duração de horas trabalhadas em minutos
+    var eventos: List<Evento>
+) {
+    fun adicionarEvento(evento: Evento) {
+        if (!eventos.contains(evento)) {
+            eventos = eventos + evento
+            evento.adicionarMembro(this)
+        }
+    }
+
+    override fun toString(): String {
+        return "Membro(nome='$nome', id=$id, trabalho=$trabalho, eventos=${eventos.map { it.titulo }})"
+    }
+}
+
 
 fun main() {
     // Criando alguns membros sem eventos inicialmente
@@ -45,19 +69,19 @@ fun main() {
         horarioInicio = LocalTime.of(9, 0),
         horarioTermino = LocalTime.of(10, 30),
         diaDaSemana = DiaDaSemana.SEGUNDA,
-        membros = listOf(joao, maria, carlos)
+        membros = emptyList()
     )
 
     // Adicionando o evento aos membros
-    val joaoComEventos = joao.copy(eventos = listOf(evento1))
-    val mariaComEventos = maria.copy(eventos = listOf(evento1))
-    val carlosComEventos = carlos.copy(eventos = listOf(evento1))
+    evento1.adicionarMembro(joao)
+    evento1.adicionarMembro(maria)
+    evento1.adicionarMembro(carlos)
 
     // Imprimindo os detalhes dos membros e eventos
     println("Membros e seus eventos:")
-    println(joaoComEventos)
-    println(mariaComEventos)
-    println(carlosComEventos)
+    println(joao)
+    println(maria)
+    println(carlos)
 
     // Imprimindo detalhes do evento
     println("")
