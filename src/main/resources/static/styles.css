@@ -142,7 +142,9 @@ h1 {
 }
 
 .prog-item {
-    margin: 5px
+    margin: 5px;
+    cursor: pointer;
+
 }
 
 
@@ -164,7 +166,7 @@ h1 {
 }
 
 .topnav {
-  background-color: #333;
+  background-color: #ab2020;
   overflow: hidden;
 }
 
@@ -186,6 +188,6 @@ h1 {
 
 /* Add a color to the active/current link */
 .topnav a.active {
-  background-color: #04AA6D;
+  background-color: #787d7c;
   color: white;
 }

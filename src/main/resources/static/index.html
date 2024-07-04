@@ -7,27 +7,26 @@
     <script src="kotlin.js"></script>
     <script src="output.js"></script>
 </head>
-<body style="background-color: black">
+<body style="background-color: rgb(51, 48, 48)">
 
 <div class="topnav">
-    <a class="active" href="#home">Home</a>
-    <a href="#news">News</a>
-    <a href="#contact">Contact</a>
-    <a href="#about">About</a>
+    <a class="active" href="index.html">Home</a>
+    <a href="membros.html">Membros</a>
+    
 </div>
 
-<header style = "height:50px">
+<!-- <header style = "height:50px">
     <div style="display: flex; height:100%">
         <div style="flex: 1; background-color: #FF0000; height: 100%; display: flex; align-items: center; justify-content: center;">
             <p style="color: white; margin: 0">INÍCIO</p>
         </div>
         <div id="quem_somos_dropdown" class="dropdown" style="flex: 1; background-color: #FF0000; height: 100%; display: flex; align-items: center; justify-content: center;">
             <p style="color: white; margin: 0;">QUEM SOMOS</p>
-            <!--<div class="dropdown-content">
+            <div class="dropdown-content">
                 <a href="nossa_gestao">Nossa Gestão</a>
                 <a href="nossosprojetos">Nossos Projetos</a>
             </div>-->
-        </div>
+        <!-- </div>
         <div style="flex: 1; background-color: #FF0000; height: 100%;  display: flex; align-items: center; justify-content: center;">
             <p style="color: white; margin: 0;" >GINCANA</p>
         </div>
@@ -35,7 +34,7 @@
             <p style="color: white; margin: 0;" >CONTATO</p>
         </div>
     </div>
-</header>
+</header> --> 
 
 
 <div class="secao_boas_vindas" style="text-align:center">
@@ -45,12 +44,21 @@
 </div>
 
 
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var clickableItems = document.querySelectorAll('.prog-item');
+        clickableItems.forEach(function(item) {
+            item.onclick = function() {
+                window.location.href = 'eventos.html';
+            };
+        });
+    });
+</script>
 
 </section>
 <section id="programacao" class="programacao">
     <div class="programacao section-header" style="justify-content: center;">
-        <h2 class="prog-title" >Agenda da Semana</h2>
+        <h2 class="prog-title"  style="justify-content: center; background-color:rgb(51,48,48)" >Agenda da Semana</h2>
     </div>
     <div class="container">
         <div class="left-col">
