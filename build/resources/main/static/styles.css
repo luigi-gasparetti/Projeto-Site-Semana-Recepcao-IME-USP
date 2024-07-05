@@ -148,14 +148,7 @@ h1 {
 }
 
 
-.fotos_veteranos  {
-        border-radius: 50%; /* This makes the images rounded */
-        width: 200px; /* Adjust as needed */
-        height: 200px; /* Adjust as needed */
-        margin-left: 150px; /* Adjust as needed */
-         /* Adjust as needed */
 
-}
 
 .conjunto_eventos {
     display: flex;
@@ -168,8 +161,7 @@ h1 {
 .topnav {
   background-color: #ab2020;
   overflow: hidden;
-  margin:-8px
-
+  margin:-8px;
 }
 
 /* Style the links inside the navigation bar */
@@ -177,7 +169,7 @@ h1 {
   float: left;
   color: #f2f2f2;
   text-align: center;
-  padding: 20px 20px;
+  padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
 }
@@ -192,4 +184,197 @@ h1 {
 .topnav a.active {
   background-color: #787d7c;
   color: white;
+}
+
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+.member {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 200px;
+    text-align: center;
+}
+.member:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.member img {
+    border-bottom: 1px solid #eee;
+    width: 100%;
+    height: auto;
+    display: block;
+}
+.member p {
+    margin: 10px 0;
+    color: #555;
+}
+
+
+.container_eventos {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    background-color: #1c1e22;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+#titulo_projeto {
+    color: #E7085B;
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.conjunto_eventos {
+    display: flex;
+    flex-direction: column;
+}
+.parte_de_cima_evento, .parte_de_baixo_evento {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.descricao_do_evento, .horario_e_local {
+    flex: 1;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+.descricao_do_evento h3, .horario_e_local h3 {
+    margin: 0 0 10px 0;
+    color: white;
+}
+.parte_de_baixo_evento {
+    gap: 20px;
+}
+.foto_de_perfil_veterano {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.foto_de_perfil_veterano img {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #444;
+}
+.nome_do_vet {
+    padding: 10px;
+    text-align: center;
+    background-color: #444;
+    width: 100%;
+}
+.nome_do_vet h5 {
+    margin: 0;
+    color: #E7085B;
+}
+@media (max-width: 768px) {
+    .parte_de_cima_evento, .parte_de_baixo_evento {
+        flex-direction: column;
+    }
+    .descricao_do_evento, .horario_e_local {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+    .foto_de_perfil_veterano {
+        margin-bottom: 20px;
+    }
+}
+
+.botao_para_se_inscrever {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.botao_para_se_inscrever button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.botao_para_se_inscrever button:hover {
+    background-color: #45a049;
+}
+
+.modal {
+    display: none; /* Ocultar por padrão */
+    position: fixed; /* Posição fixa */
+    z-index: 1; /* Z-index alto para estar acima de outros conteúdos */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largura total */
+    height: 100%; /* Altura total */
+    overflow: auto; /* Rolagem se necessário */
+    background-color: rgba(0,0,0,0.4); /* Fundo escuro semi-transparente */
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Centraliza o modal verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Largura do modal */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Estilo da caixa de texto */
+input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+input[type="text"]:focus {
+    outline: none;
+    border-color: #6ac4bf; /* Cor do contorno quando focado */
+    box-shadow: 0 0 5px rgba(106, 196, 191, 0.5); /* Sombra quando focado */
+}
+/* Estilo do botão de confirmar */
+button {
+    background-color: #6ac4bf;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background-color: #4d9f9a;
 }
