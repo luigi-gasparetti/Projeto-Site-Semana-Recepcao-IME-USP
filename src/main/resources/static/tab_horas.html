@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <div class="topnav">
+      <a  href="index.html">Home</a>
+      <a href="membros.html">Membros</a>
+      <a  class = 'active' href="tab_horas.html">Tabela</a>
+      
+  </div>
+  
+    <title>Tabela de Veteranos</title>
+    <style>
+      body {
+          font-family: 'Arial', sans-serif;
+          background-color: #f0f0f0; /* Fundo cinza claro */
+          margin: 0;
+          padding: 20px;
+      }
+      .container {
+          max-width: 800px;
+          margin: auto;
+          background-color: #fff; /* Fundo branco */
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+          text-align: center;
+          color: #333;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+      }
+      th, td {
+          padding: 12px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+      }
+      th {
+          background-color: #f2f2f2;
+          color: #333;
+      }
+      tr:hover {
+          background-color: #f5f5f5;
+      }
+      .download-button {
+          background-color: #4CAF50;
+          border: none;
+          color: white;
+          padding: 10px 20px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin-top: 20px;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+      }
+      .download-button:hover {
+          background-color: #45a049;
+      }
+  </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tabela de Veteranos - Horas Trabalhadas</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome do Veterano</th>
+                    <th>Horas Trabalhadas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Veterano 1</td>
+                    <td>40</td>
+                </tr>
+                <tr>
+                    <td>Veterano 2</td>
+                    <td>32</td>
+                </tr>
+                <tr>
+                    <td>Veterano 3</td>
+                    <td>45</td>
+                </tr>
+                <tr>
+                    <td>Veterano 4</td>
+                    <td>28</td>
+                </tr>
+                <!-- Adicione mais linhas conforme necessário -->
+            </tbody>
+        </table>
+        <button class="download-button" onclick="downloadTableData()">Baixar Dados</button>
+
+    </div>
+
+
+
+
+    <script>
+      function downloadTableData() {
+          // Seleciona a tabela e as linhas de dados
+          const table = document.querySelector('table');
+          const rows = table.querySelectorAll('tr');
+
+          // Inicializa a variável para armazenar os dados do arquivo de texto
+          let csvContent = "Nome do Veterano,Horas Trabalhadas\n";
+
+          // Itera sobre cada linha da tabela (exceto o cabeçalho) e coleta os dados
+          rows.forEach(row => {
+              const cols = row.querySelectorAll('td');
+              if (cols.length > 0) {
+                  const name = cols[0].textContent;
+                  const hours = cols[1].textContent;
+                  csvContent += `${name},${hours}\n`; // Formato CSV: nome,horas\n
+              }
+          });
+
+          // Cria um objeto Blob com os dados do arquivo
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+          // Cria um URL temporário e cria um link de download
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "dados_veteranos.txt");
+          document.body.appendChild(link);
+          link.click();
+
+          // Libera o objeto URL criado
+          setTimeout(function() {
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(url);
+          }, 0);
+      }
+  </script>
+</body>
+</html>
