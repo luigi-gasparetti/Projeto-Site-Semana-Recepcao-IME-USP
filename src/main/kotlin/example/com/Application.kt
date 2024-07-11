@@ -16,7 +16,7 @@ fun Application.module() {
 
 val eventos = mutableListOf(
     Evento("Reunião", "Reunião de status semanal", 1, 60, "10:00", "11:00", DiaDaSemana.SEGUNDA, emptyList()),
-    Evento("Gincana", "Reunião de status semanal", 1, 60, "10:00", "11:00", DiaDaSemana.TERCA, emptyList()),
+    Evento("Gincana", "Reunião de status semanal", 1, 60, "10:00", "11:00", DiaDaSemana.TERÇA, emptyList()),
     Evento("Apresentação", "Demonstração do produto", 2, 45, "14:00", "14:45", DiaDaSemana.QUARTA, emptyList()),
     Evento("Apresentação", "Demonstração do produto", 2, 45, "14:00", "14:45", DiaDaSemana.QUINTA, emptyList()),
     Evento("Reunião", "Reunião de status semanal", 1, 60, "10:00", "11:00", DiaDaSemana.SEXTA, emptyList()),

@@ -5,7 +5,7 @@ import java.time.LocalTime
 
 enum class DiaDaSemana(val nome: String) {
     SEGUNDA("Segunda-feira"),
-    TERCA("Terça-feira"),
+    TERÇA("Terça-feira"),
     QUARTA("Quarta-feira"),
     QUINTA("Quinta-feira"),
     SEXTA("Sexta-feira");
