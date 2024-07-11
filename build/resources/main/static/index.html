@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="kotlin.js"></script>
-    <script src="output.js"></script>
+    <!-- <script src="kotlin.js"></script>
+    <script src="output.js"></script> -->
 </head>
 <body style="background-color: rgb(204, 204, 204)">
 
@@ -14,7 +14,7 @@
     <a class="active" href="index.html">Home</a>
     <a href="membros.html">Membros</a>
     <a  href="tab_horas.html">Tabela</a>
-    
+
 </div>
 
 <!-- <header style = "height:50px">
@@ -28,315 +28,83 @@
                 <a href="nossa_gestao">Nossa Gestão</a>
                 <a href="nossosprojetos">Nossos Projetos</a>
             </div>-->
-        <!-- </div>
-        <div style="flex: 1; background-color: #FF0000; height: 100%;  display: flex; align-items: center; justify-content: center;">
-            <p style="color: white; margin: 0;" >GINCANA</p>
-        </div>
-        <div style="flex: 1; background-color: #FF0000; height: 100%;  display: flex; align-items: center; justify-content: center;">
-            <p style="color: white; margin: 0;" >CONTATO</p>
-        </div>
-    </div>
-</header> --> 
+<!-- </div>
+<div style="flex: 1; background-color: #FF0000; height: 100%;  display: flex; align-items: center; justify-content: center;">
+    <p style="color: white; margin: 0;" >GINCANA</p>
+</div>
+<div style="flex: 1; background-color: #FF0000; height: 100%;  display: flex; align-items: center; justify-content: center;">
+    <p style="color: white; margin: 0;" >CONTATO</p>
+</div>
+</div>
+</header> -->
 
 
-<div class="secao_boas_vindas" style="text-align:center">
+ <div class="secao_boas_vindas" style="text-align:center">
     <p class="texto_boas_vindas">
-        Seja bem vinde ao IME-USP
+        Sistema da Comissão
     </p>
 </div>
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var clickableItems = document.querySelectorAll('.prog-item');
-        clickableItems.forEach(function(item) {
-            item.onclick = function() {
-                window.location.href = 'eventos.html';
-            };
-        });
-    });
-</script>
-
-</section>
 <section id="programacao" class="programacao">
     <div class="programacao section-header" style="justify-content: center;">
-        <h2 class="prog-title"  style="justify-content: center; background-color:rgb(204, 204, 204); color:black" >Agenda da Semana</h2>
+        <h2 class="prog-title" style="justify-content: center; background-color:rgb(204, 204, 204); color:black">Agenda da Semana</h2>
     </div>
     <div class="container">
-        <div class="left-col">
-            <div class="prog empty-prog">
-            </div>
-            <div class="prog item">
-                <span>10h00</span>
-            </div>
-            <div class="prog item">
-                <span>11h00</span>
-            </div>
-            <div class="prog item">
-                <span>12h00</span>
-            </div>
-            <div class="prog item">
-                <span>13h00</span>
-            </div>
-            <div class="prog item">
-                <span>14h00</span>
-            </div>
-            <div class="prog item">
-                <span>15h00</span>
-            </div>
-            <div class="prog item">
-                <span>16h00</span>
-            </div>
-            <div class="prog item">
-                <span>17h00</span>
-            </div>
-        </div>
-        <div class="right-col">
-            <div class="prog-col">
-                <div class="prog-header">
-                    <span class="prog-header-text">1º DIA </span>
-                    <span class="prog-header-text secondary"> - DATA</span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item infosession">
-                    <span class="item-header">INFOSESSION</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item infosession">
-                    <span class="item-header">INFOSESSION</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item minicurso">
-                    <span class="item-header">MINICURSO:</span>
-                    <span class="item-content">
-             Descricao do evento
-            </span>
-                </div>
-            </div>
-            <div class="prog-col">
-                <div class="prog-header">
-                    <span class="prog-header-text">2º DIA </span>
-                    <span class="prog-header-text secondary"> - DATA</span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item empty">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item empty">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-            </div>
-            <div class="prog-col">
-                <div class="prog-header">
-                    <span class="prog-header-text">3º DIA </span>
-                    <span class="prog-header-text secondary"> - DATA</span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-            </div>
-            <div class="prog-col">
-                <div class="prog-header">
-                    <span class="prog-header-text">4º DIA </span>
-                    <span class="prog-header-text secondary">DATA</span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-            </div>
-            <div class="prog-col">
-                <div class="prog-header">
-                    <span class="prog-header-text">5º DIA </span>
-                    <span class="prog-header-text secondary">DATA</span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item empty">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-                <div class="prog-item">
-                    <span class="item-header">PALESTRA</span>
-                    <span class="item-content">
-              Descricao do evento
-            </span>
-                </div>
-            </div>
+        <div id="event-container" class="right-col">
+            <!-- Event columns will be populated here by JavaScript -->
         </div>
     </div>
 </section>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/eventos')
+            .then(response => response.json())
+            .then(data => {
+                const eventContainer = document.getElementById('event-container');
+                const daysMap = new Map();
 
+                data.forEach(evento => {
+                    // Check if the column for the day already exists
+                    if (!daysMap.has(evento.diaDaSemana)) {
+                        // Create event column
+                        const eventCol = document.createElement('div');
+                        eventCol.classList.add('prog-col');
+
+                        // Create event header
+                        const eventHeader = document.createElement('div');
+                        eventHeader.classList.add('prog-header');
+                        eventHeader.innerHTML = `
+                            <span class="prog-header-text">${evento.diaDaSemana}</span>
+                        `;
+
+                        // Append header to the column
+                        eventCol.appendChild(eventHeader);
+
+                        // Append column to the container and map
+                        eventContainer.appendChild(eventCol);
+                        daysMap.set(evento.diaDaSemana, eventCol);
+                    }
+
+                    // Get the existing column for the day
+                    const eventCol = daysMap.get(evento.diaDaSemana);
+
+                    // Create event item
+                    const eventItem = document.createElement('div');
+                    eventItem.classList.add('prog-item');
+                    eventItem.innerHTML = `
+                        <span class="item-header">${evento.titulo}</span>
+                        <span class="item-content">${evento.horarioInicio} - ${evento.horarioTermino} - ${evento.descricao}</span>
+                    `;
+
+                    // Append item to the column
+                    eventCol.appendChild(eventItem);
+                });
+            })
+            .catch(error => console.error('Error fetching event data:', error));
+    });
+</script>
 
 
 </body>
