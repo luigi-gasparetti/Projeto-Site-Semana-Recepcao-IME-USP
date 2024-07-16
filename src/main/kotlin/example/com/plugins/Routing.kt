@@ -26,7 +26,7 @@ fun Application.configureRouting() {
                 call.respondText("Evento adicionado com sucesso", status = HttpStatusCode.Created)
         }
 
-        get("/static/eventos.html/{eventoId}") {
+        get("/api/eventos/{eventoId}") {
             val eventoId = call.parameters["eventoId"]?.toIntOrNull()
 
             if (eventoId != null && eventoId >= 0) {

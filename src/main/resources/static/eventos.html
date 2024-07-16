@@ -67,6 +67,58 @@
     </div>
 
     <script>
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const eventoId = params.get('eventoId');
+    
+            if (eventoId) {
+                fetch(`/api/eventos/${eventoId}`)
+                    .then(response => response.json())
+                    .then(evento => {
+                        document.getElementById('titulo_projeto').textContent = evento.titulo;
+                        document.getElementById('descricao_evento').textContent = evento.descricao;
+                        document.getElementById('horario_evento').textContent = `Horário: ${evento.horarioInicio} - ${evento.horarioTermino}`;
+                        document.getElementById('local_evento').textContent = `Local: ${evento.local}`;
+    
+                        const veteranosContainer = document.getElementById('veteranos');
+                        evento.veteranos.forEach(veterano => {
+                            const veteranoDiv = document.createElement('div');
+                            veteranoDiv.classList.add('foto_de_perfil_veterano');
+                            veteranoDiv.innerHTML = `
+                                <img class="fotos_veteranos" src="${veterano.foto}" alt="Profile Picture">
+                                <div class="nome_do_vet"><h5>${veterano.nome}</h5></div>
+                            `;
+                            veteranosContainer.appendChild(veteranoDiv);
+                        });
+    
+                        // Example: Simulating availability (replace with real logic)
+                        const hasVacancy = evento.vagas > 0;
+    
+                        const subscribeButton = document.getElementById('subscribeButton');
+                        if (hasVacancy) {
+                            subscribeButton.style.backgroundColor = '#4CAF50';
+                            subscribeButton.textContent = 'Inscrever-se';
+                            subscribeButton.onmouseover = function() { this.style.backgroundColor = '#45a049'; };
+                            subscribeButton.onmouseout = function() { this.style.backgroundColor = '#4CAF50'; };
+                        } else {
+                            subscribeButton.style.backgroundColor = '#FF6347';
+                            subscribeButton.textContent = 'Sem Vagas';
+                            subscribeButton.onmouseover = function() { this.style.backgroundColor = '#e55347'; };
+                            subscribeButton.onmouseout = function() { this.style.backgroundColor = '#FF6347'; };
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching event details:', error);
+                        document.getElementById('titulo_projeto').textContent = 'Erro ao carregar os detalhes do evento';
+                    });
+            } else {
+                document.getElementById('titulo_projeto').textContent = 'ID do evento não fornecido';
+            }
+        });
+
+
         // Botão de inscrição
         const subscribeButton = document.getElementById('subscribeButton');
 
