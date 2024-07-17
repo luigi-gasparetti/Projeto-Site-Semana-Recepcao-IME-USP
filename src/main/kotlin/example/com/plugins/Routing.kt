@@ -42,6 +42,20 @@ fun Application.configureRouting() {
             }
         }
 
+        delete("/api/eventos/{eventoId}") {
+            val eventoId = call.parameters["eventoId"]?.toIntOrNull()
+            if (eventoId != null && eventoId >= 0) {
+                val eventoRemoved = eventos.removeIf { it.id == eventoId }
+                if (eventoRemoved) {
+                    call.respondText("Evento deletado com sucesso", status = HttpStatusCode.OK)
+                } else {
+                    call.respondText("Evento não encontrado", status = HttpStatusCode.NotFound)
+                }
+            } else {
+                call.respondText("ID inválido", status = HttpStatusCode.BadRequest)
+            }
+        }
+
     }
 
 }

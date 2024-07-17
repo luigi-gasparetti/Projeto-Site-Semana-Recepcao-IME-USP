@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="kotlin.js"></script>
-    <script src="script.js"></script>
+    <!-- <script src="kotlin.js"></script>
+    <script src="output.js"></script> -->
 </head>
 <body style="background-color: #f0f0f0">
 
@@ -39,7 +39,7 @@
 </header> -->
 
 
- <div class="secao_boas_vindas" style="text-align:center">
+<div class="secao_boas_vindas" style="text-align:center">
     <p class="texto_boas_vindas">
         Sistema da Comissão
     </p>
@@ -140,43 +140,26 @@
             .catch(error => console.error('Error fetching event data:', error));
     });
      // Modal functionality
-     document.addEventListener('DOMContentLoaded', function() {
-        // Modal functionality
         const modal = document.getElementById("eventModal");
         const btn = document.getElementById("addEventButton");
         const span = document.getElementsByClassName("close")[0];
-    
-        if (!modal || !btn || !span) {
-            console.error('Modal, button, or close span not found');
-            return;
-        }
-    
+
         btn.onclick = function() {
-            console.log('Open modal');
             modal.style.display = "block";
         }
-    
+
         span.onclick = function() {
-            console.log('Close modal');
             modal.style.display = "none";
         }
-    
+
         window.onclick = function(event) {
             if (event.target == modal) {
-                console.log('Click outside modal');
                 modal.style.display = "none";
             }
         }
-    
-        const form = document.getElementById('eventForm');
-        if (!form) {
-            console.error('Event form not found');
-            return;
-        }
-    
-        form.onsubmit = function(event) {
+
+        document.getElementById('eventForm').onsubmit = function(event) {
             event.preventDefault();
-            console.log('Form submitted');
 
             const newEvent = {
                 titulo: document.getElementById('titulo').value,
@@ -185,9 +168,7 @@
                 horarioInicio: document.getElementById('horarioInicio').value,
                 horarioTermino: document.getElementById('horarioTermino').value
             };
-    
-            console.log('New event:', newEvent);
-    
+
             fetch('/api/eventos', {
                 method: 'POST',
                 headers: {
@@ -195,19 +176,14 @@
                 },
                 body: JSON.stringify(newEvent)
             })
-            .then(response => {
-                console.log('Response status:', response.status);
-                return response.text();
-            })
+            .then(response => response.text())
             .then(data => {
-                console.log('Response data:', data);
                 alert(data);
                 modal.style.display = "none";
                 window.location.reload();
             })
             .catch(error => console.error('Error adding event:', error));
         }
-     })
 </script>
 
 
