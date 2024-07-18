@@ -64,7 +64,7 @@ open class Membro(
 }
 
 
-fun main() {
+/* fun main() {
     // Criando alguns membros sem eventos inicialmente
     val joao = Membro(nome = "João", trabalho = 0, eventos = emptyList()) // 8 horas
     val maria = Membro(nome = "Maria", trabalho = 0, eventos = emptyList()) // 5 horas
@@ -97,4 +97,4 @@ fun main() {
     println("")
     println("Detalhes do evento:")
     println(evento1)
-}
+} */

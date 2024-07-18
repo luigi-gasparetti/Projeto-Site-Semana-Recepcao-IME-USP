@@ -89,23 +89,30 @@ fun Application.configureRouting() {
             }
         }
 
-        post("/api/eventos/{eventoId}/membros") {
+        post("/api/eventos/{eventoId}/membros/{membroId}") {
             val eventoId = call.parameters["eventoId"]?.toIntOrNull()
-            val membroRequest = call.receive<MembroRequest>() // Use a DTO or similar to map incoming JSON
-            if (eventoId != null) {
+            val membroId = call.parameters["membroId"]?.toIntOrNull()
+
+            if (eventoId != null && membroId != null) {
                 val evento = eventos.find { it.id == eventoId }
+                val membro = membros.find { it.id == membroId }
+
                 if (evento != null) {
-                    val newMembro = Membro(nome = membroRequest.nome, trabalho = 0, eventos = emptyList())
-                    evento.adicionarMembro(newMembro)
-                    membros.add(newMembro) // Ensure the global list or storage is updated
-                    call.respondText("Membro adicionado com sucesso", status = HttpStatusCode.Created)
+                    if (membro != null) {
+                        evento.adicionarMembro(membro)
+                        membro.eventos = membro.eventos + evento // Adiciona o evento à lista de eventos do membro
+                        call.respondText("Membro adicionado ao evento com sucesso", status = HttpStatusCode.Created)
+                    } else {
+                        call.respondText("Membro não encontrado", status = HttpStatusCode.NotFound)
+                    }
                 } else {
                     call.respondText("Evento não encontrado", status = HttpStatusCode.NotFound)
                 }
             } else {
-                call.respondText("ID de evento inválido", status = HttpStatusCode.BadRequest)
+                call.respondText("ID de evento ou membro inválido", status = HttpStatusCode.BadRequest)
             }
         }
+
 
 
         // Remove a member from a specific event
