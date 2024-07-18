@@ -21,12 +21,7 @@ val membros = mutableListOf(
 
 // Create Evento instances and associate Membro instances with them
 val eventos = mutableListOf(
-    Evento("Reunião", "Reunião de status semanal", 1, 60, "10:00", "11:00", DiaDaSemana.SEGUNDA, emptyList()),
-    Evento("Gincana", "Gincana de integração", 2, 90, "15:00", "16:30", DiaDaSemana.TERÇA, emptyList()),
-    Evento("Apresentação", "Demonstração do produto", 3, 45, "14:00", "14:45", DiaDaSemana.QUARTA, emptyList()),
-    Evento("Workshop", "Workshop de desenvolvimento", 4, 120, "10:00", "12:00", DiaDaSemana.QUINTA, emptyList()),
-    Evento("Reunião", "Reunião de status semanal", 5, 60, "10:00", "11:00", DiaDaSemana.SEXTA, emptyList()),
-    Evento("Apresentação", "Demonstração do produto", 6, 45, "14:00", "14:45", DiaDaSemana.SEXTA, emptyList())
+    Evento("Reunião", "Reunião de status semanal", 0, 60, "10:00", "11:00", DiaDaSemana.SEGUNDA, emptyList()),
 )
 
 fun findEventoById(eventos: List<Evento>, id: Int): Evento? {

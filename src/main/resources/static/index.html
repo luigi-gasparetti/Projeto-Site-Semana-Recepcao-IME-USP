@@ -1,50 +1,23 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- <script src="kotlin.js"></script>
-    <script src="output.js"></script> -->
 </head>
 <body style="background-color: #f0f0f0">
 
 <div class="topnav">
     <a class="active" href="index.html">Home</a>
     <a href="membros.html">Membros</a>
-    <a  href="tab_horas.html">Tabela</a>
-
+    <a href="tab_horas.html">Tabela</a>
 </div>
-
-<!-- <header style = "height:50px">
-    <div style="display: flex; height:100%">
-        <div style="flex: 1; background-color: #FF0000; height: 100%; display: flex; align-items: center; justify-content: center;">
-            <p style="color: white; margin: 0">INÍCIO</p>
-        </div>
-        <div id="quem_somos_dropdown" class="dropdown" style="flex: 1; background-color: #FF0000; height: 100%; display: flex; align-items: center; justify-content: center;">
-            <p style="color: white; margin: 0;">QUEM SOMOS</p>
-            <div class="dropdown-content">
-                <a href="nossa_gestao">Nossa Gestão</a>
-                <a href="nossosprojetos">Nossos Projetos</a>
-            </div>-->
-<!-- </div>
-<div style="flex: 1; background-color: #FF0000; height: 100%;  display: flex; align-items: center; justify-content: center;">
-    <p style="color: white; margin: 0;" >GINCANA</p>
-</div>
-<div style="flex: 1; background-color: #FF0000; height: 100%;  display: flex; align-items: center; justify-content: center;">
-    <p style="color: white; margin: 0;" >CONTATO</p>
-</div>
-</div>
-</header> -->
-
 
 <div class="secao_boas_vindas" style="text-align:center">
     <p class="texto_boas_vindas">
         Sistema da Comissão
     </p>
 </div>
-
 
 <section id="programacao" class="programacao">
     <div class="programacao section-header" style="justify-content: center;">
@@ -56,7 +29,6 @@
         </div>
     </div>
     <button id="addEventButton" class="add-event-button">Adicionar Evento</button>
-
 </section>
 
 <div id="addEventModal" class="modal">
@@ -71,18 +43,16 @@
             <label for="duracao">Duração (minutos):</label>
             <input type="number" id="duracao" name="duracao" required>
             <label for="horarioInicio">Horário de Início:</label>
-            <input type="time" id="horarioInicio" name="horarioInicio" required>
+            <input type="text" id="horarioInicio" name="horarioInicio" required>
             <label for="horarioTermino">Horário de Término:</label>
-            <input type="time" id="horarioTermino" name="horarioTermino" required>
+            <input type="text" id="horarioTermino" name="horarioTermino" required>
             <label for="diaDaSemana">Dia da Semana:</label>
             <select id="diaDaSemana" name="diaDaSemana" required>
                 <option value="SEGUNDA">Segunda</option>
-                <option value="TERCA">Terça</option>
+                <option value="TERÇA">Terça</option>
                 <option value="QUARTA">Quarta</option>
                 <option value="QUINTA">Quinta</option>
                 <option value="SEXTA">Sexta</option>
-                <option value="SABADO">Sábado</option>
-                <option value="DOMINGO">Domingo</option>
             </select>
             <button type="submit">Adicionar Evento</button>
         </form>
@@ -91,38 +61,28 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const daysOfWeek = ["SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA"];
+        const eventContainer = document.getElementById('event-container');
+        const daysMap = new Map();
+
+        // Initialize empty columns for each day of the week
+        daysOfWeek.forEach(day => {
+            const eventCol = document.createElement('div');
+            eventCol.classList.add('prog-col');
+            const eventHeader = document.createElement('div');
+            eventHeader.classList.add('prog-header');
+            eventHeader.innerHTML = `<span class="prog-header-text">${day}</span>`;
+            eventCol.appendChild(eventHeader);
+            eventContainer.appendChild(eventCol);
+            daysMap.set(day, eventCol);
+        });
+
         fetch('/api/eventos')
             .then(response => response.json())
             .then(data => {
-                const eventContainer = document.getElementById('event-container');
-                const daysMap = new Map();
-
                 data.forEach(evento => {
-                    // Check if the column for the day already exists
-                    if (!daysMap.has(evento.diaDaSemana)) {
-                        // Create event column
-                        const eventCol = document.createElement('div');
-                        eventCol.classList.add('prog-col');
-
-                        // Create event header
-                        const eventHeader = document.createElement('div');
-                        eventHeader.classList.add('prog-header');
-                        eventHeader.innerHTML = `
-                            <span class="prog-header-text">${evento.diaDaSemana}</span>
-                        `;
-
-                        // Append header to the column
-                        eventCol.appendChild(eventHeader);
-
-                        // Append column to the container and map
-                        eventContainer.appendChild(eventCol);
-                        daysMap.set(evento.diaDaSemana, eventCol);
-                    }
-
-                    // Get the existing column for the day
                     const eventCol = daysMap.get(evento.diaDaSemana);
 
-                    // Create event item
                     const eventItem = document.createElement('div');
                     eventItem.classList.add('prog-item');
                     eventItem.innerHTML = `
@@ -132,60 +92,62 @@
                     eventItem.addEventListener('click', () => {
                         window.location.href = `eventos.html?eventoId=${evento.id}`;
                     });
-
-                    // Append item to the column
                     eventCol.appendChild(eventItem);
                 });
             })
             .catch(error => console.error('Error fetching event data:', error));
     });
-     // Modal functionality
-        const modal = document.getElementById("eventModal");
-        const btn = document.getElementById("addEventButton");
-        const span = document.getElementsByClassName("close")[0];
 
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
+    const modal = document.getElementById("addEventModal");
+    const btn = document.getElementById("addEventButton");
+    const span = document.getElementsByClassName("close")[0];
 
-        span.onclick = function() {
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
             modal.style.display = "none";
         }
+    }
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+    let currentId = 1;
+    document.getElementById('addEventForm').onsubmit = function(event) {
+        event.preventDefault();
 
-        document.getElementById('eventForm').onsubmit = function(event) {
-            event.preventDefault();
+        const newEvent = {
+            titulo: document.getElementById('titulo').value,
+            descricao: document.getElementById('descricao').value,
+            id: currentId,
+            duracao: document.getElementById('duracao').value,
+            horarioInicio: document.getElementById('horarioInicio').value,
+            horarioTermino: document.getElementById('horarioTermino').value,
+            diaDaSemana: document.getElementById('diaDaSemana').value,
+            membros: []
+        };
 
-            const newEvent = {
-                titulo: document.getElementById('titulo').value,
-                descricao: document.getElementById('descricao').value,
-                diaDaSemana: document.getElementById('diaDaSemana').value,
-                horarioInicio: document.getElementById('horarioInicio').value,
-                horarioTermino: document.getElementById('horarioTermino').value
-            };
-
-            fetch('/api/eventos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newEvent)
-            })
-            .then(response => response.text())
-            .then(data => {
-                alert(data);
-                modal.style.display = "none";
-                window.location.reload();
-            })
-            .catch(error => console.error('Error adding event:', error));
-        }
+        fetch('/api/eventos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newEvent)
+        })
+        .then(response => response.text())
+        .then(data => {
+            currentId++;
+            alert('Evento adicionado com sucesso!');
+            modal.style.display = "none";
+            window.location.reload();
+        })
+        .catch(error => console.error('Error adding event:', error));
+    };
 </script>
-
 
 </body>
 </html>

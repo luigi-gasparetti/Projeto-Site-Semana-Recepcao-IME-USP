@@ -22,7 +22,6 @@
             </div>
             <div class="horario_e_local">
                 <h3 id="horario_evento">Horário: 00:00 - 00:00</h3>
-                <h3 id="local_evento">Local: Local de Teste</h3>
             </div>
         </div>
         <div class="parte_de_baixo_evento" id="veteranos">
@@ -57,7 +56,6 @@
                     document.getElementById('titulo_projeto').textContent = evento.titulo;
                     document.getElementById('descricao_evento').textContent = evento.descricao;
                     document.getElementById('horario_evento').textContent = `Horário: ${evento.horarioInicio} - ${evento.horarioTermino}`;
-                    document.getElementById('local_evento').textContent = `Local: ${evento.local}`;
 
                     const veteranosContainer = document.getElementById('veteranos');
                     evento.membros.forEach(membro => {
