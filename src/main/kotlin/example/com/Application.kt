@@ -16,7 +16,16 @@ fun Application.module() {
 
 // Create Membro instances
 val membros = mutableListOf(
+<<<<<<< Updated upstream
     Membro(nome = "João", id = 0, trabalho = 40, eventos = emptyList()),
+=======
+    Membro(nome = "João", ,trabalho = 40, eventos = emptyList()),
+    Membro(nome = "Maria", trabalho = 32, eventos = emptyList()),
+    Membro(nome = "Carlos", trabalho = 45, eventos = emptyList()),
+    Membro(nome = "Ana", trabalho = 28, eventos = emptyList()),
+    Membro(nome = "teste", trabalho = 280, eventos = emptyList()),
+    Membro(nome = "teste2", trabalho = 280, eventos = emptyList())
+>>>>>>> Stashed changes
 )
 
 // Create Evento instances and associate Membro instances with them
@@ -33,6 +42,3 @@ fun findEventoById(eventos: List<Evento>, id: Int): Evento? {
     return eventos.find { it.id == id }
 }
 
-fun findMembroById(membros: List<Membro>, id: Int): Membro? {
-    return membros.find { it.id == id }
-}
