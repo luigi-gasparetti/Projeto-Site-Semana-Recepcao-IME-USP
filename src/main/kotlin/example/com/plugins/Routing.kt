@@ -11,6 +11,10 @@ fun Application.configureRouting() {
     routing {
         staticResources("static", "static")
 
+
+
+
+
         get("/") {
         call.respondRedirect("/static/index.html")
         }
@@ -57,6 +61,31 @@ fun Application.configureRouting() {
                 }
             } else {
                 call.respondText("ID inválido", status = HttpStatusCode.BadRequest)
+            }
+        }
+
+        get("/api/membros") {
+            call.respond(membros)
+        }
+
+        post("/api/membros") {
+            val newMember = call.receive<Membro>()
+            println("Received member: $newMember")
+            membros.add(newMember)
+            call.respondText("Membro adicionado com sucesso", status = HttpStatusCode.Created)
+        }
+
+        delete("/api/membros/{nome}") {
+            val nome = call.parameters["nome"]
+            if (nome != null) {
+                val membroRemoved = membros.removeIf { it.nome == nome }
+                if (membroRemoved) {
+                    call.respondText("Membro deletado com sucesso", status = HttpStatusCode.OK)
+                } else {
+                    call.respondText("Membro não encontrado", status = HttpStatusCode.NotFound)
+                }
+            } else {
+                call.respondText("Nome do membro é necessário", status = HttpStatusCode.BadRequest)
             }
         }
 

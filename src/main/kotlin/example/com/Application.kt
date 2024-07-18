@@ -37,3 +37,7 @@ val eventos = mutableListOf(
 fun findEventoById(eventos: List<Evento>, id: Int): Evento? {
     return eventos.find { it.id == id }
 }
+
+fun findMembroById(membros: List<Membro>, id: Int): Membro? {
+    return membros.find { it.id == id }
+}
