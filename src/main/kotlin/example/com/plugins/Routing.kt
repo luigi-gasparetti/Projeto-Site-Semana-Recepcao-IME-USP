@@ -89,6 +89,46 @@ fun Application.configureRouting() {
             }
         }
 
+        post("/api/eventos/{eventoId}/membros") {
+            val eventoId = call.parameters["eventoId"]?.toIntOrNull()
+            val membroRequest = call.receive<MembroRequest>() // Use a DTO or similar to map incoming JSON
+            if (eventoId != null) {
+                val evento = eventos.find { it.id == eventoId }
+                if (evento != null) {
+                    val newMembro = Membro(nome = membroRequest.nome, trabalho = 0, eventos = emptyList())
+                    evento.adicionarMembro(newMembro)
+                    membros.add(newMembro) // Ensure the global list or storage is updated
+                    call.respondText("Membro adicionado com sucesso", status = HttpStatusCode.Created)
+                } else {
+                    call.respondText("Evento não encontrado", status = HttpStatusCode.NotFound)
+                }
+            } else {
+                call.respondText("ID de evento inválido", status = HttpStatusCode.BadRequest)
+            }
+        }
+
+
+        // Remove a member from a specific event
+        delete("/api/eventos/{eventoId}/membros/{memberName}") {
+            val eventoId = call.parameters["eventoId"]?.toIntOrNull()
+            val memberName = call.parameters["memberName"]
+
+            if (eventoId != null && memberName != null) {
+                val evento = eventos.find { it.id == eventoId }
+                val membro = membros.find { it.nome == memberName }
+
+                if (evento != null && membro != null) {
+                    evento.membros = evento.membros.filter { it.nome != memberName }
+                    membro.eventos = membro.eventos.filter { it.id != eventoId }
+                    call.respondText("Membro removido com sucesso", status = HttpStatusCode.OK)
+                } else {
+                    call.respond(HttpStatusCode.NotFound, "Evento ou membro não encontrado")
+                }
+            } else {
+                call.respond(HttpStatusCode.BadRequest, "ID do evento ou nome do membro inválido")
+            }
+        }
+
     }
 
 }

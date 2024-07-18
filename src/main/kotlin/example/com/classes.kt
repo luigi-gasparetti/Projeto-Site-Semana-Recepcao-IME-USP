@@ -58,16 +58,17 @@ open class Membro(
     }
 
     override fun toString(): String {
-        return "Membro(nome='$nome', id=$id, trabalho=$trabalho, eventos=${eventos.map { it.titulo }})"
+        return "Membro(nome='$nome',id'=$id, trabalho=$trabalho, eventos=${eventos.map { it.titulo }})"
+        //add id aqui se precisar
     }
 }
 
 
 fun main() {
     // Criando alguns membros sem eventos inicialmente
-    val joao = Membro(nome = "João", id = 1, trabalho = 0, eventos = emptyList()) // 8 horas
-    val maria = Membro(nome = "Maria", id = 2, trabalho = 0, eventos = emptyList()) // 5 horas
-    val carlos = Membro(nome = "Carlos", id = 3, trabalho = 0, eventos = emptyList()) // 10 horas
+    val joao = Membro(nome = "João", trabalho = 0, eventos = emptyList()) // 8 horas
+    val maria = Membro(nome = "Maria", trabalho = 0, eventos = emptyList()) // 5 horas
+    val carlos = Membro(nome = "Carlos", trabalho = 0, eventos = emptyList()) // 10 horas
 
     // Criando um evento com esses membros
     val evento1 = Evento(
