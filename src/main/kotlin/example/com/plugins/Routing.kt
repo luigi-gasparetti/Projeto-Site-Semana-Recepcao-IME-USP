@@ -19,6 +19,10 @@ fun Application.configureRouting() {
             call.respond(eventos)
         }
 
+        get("/api/membros") {
+            call.respond(membros)
+        }
+
 
         post("/api/eventos") {
                 val newEvento = call.receive<Evento>()

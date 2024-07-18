@@ -1,177 +1,132 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <head>
-        <script src="kotlin.js"></script>
-        <script src="output.js"></script>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Evento</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-<body style = "background-color: rgb(204, 204, 204);">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evento</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body style="background-color: rgb(204, 204, 204);">
+<div class="topnav">
+    <a href="index.html">Home</a>
+    <a href="membros.html">Membros</a>
+    <a href="tab_horas.html">Tabela</a>
+</div>
 
-    <div class="topnav">
-        <a href="index.html">Home</a>
-        <a  href="membros.html">Membros</a>
-        <a  href="tab_horas.html">Tabela</a>
-        
-    </div>
-    
-
-    <div class="container_eventos">
-        <h3 id="titulo_projeto">Carregar aqui o nome do Evento em questão</h3>
-        <div class="conjunto_eventos">
-            <div class="parte_de_cima_evento">
-                <div class="descricao_do_evento">
-                    <h3>O Evento em questão é um evento de teste, que tem como objetivo testar a funcionalidade do site.</h3>
-                </div>
-                <div class="horario_e_local">
-                    <h3>Horário: 00:00</h3>
-                    <h3>Local: Local de Teste</h3>
-                </div>
+<div class="container_eventos">
+    <h3 id="titulo_projeto">Carregar aqui o nome do Evento em questão</h3>
+    <div class="conjunto_eventos">
+        <div class="parte_de_cima_evento">
+            <div class="descricao_do_evento">
+                <h3 id="descricao_evento">Descrição do evento</h3>
             </div>
-            <div class="parte_de_baixo_evento">
-                <div class="foto_de_perfil_veterano">
-                    <img class="fotos_veteranos" src="assets/icon.png" alt="Profile Picture 1">
-                    <div class="nome_do_vet"><h5>Veterano 1</h5></div>
-                </div>
-                <div class="foto_de_perfil_veterano">
-                    <img class="fotos_veteranos" src="assets/icon.png" alt="Profile Picture 2">
-                    <div class="nome_do_vet"><h5>Veterano 2</h5></div>
-                </div>
-                <div class="foto_de_perfil_veterano">
-                    <img class="fotos_veteranos" src="assets/icon.png" alt="Profile Picture 3">
-                    <div class="nome_do_vet"><h5>Veterano 3</h5></div>
-                </div>
-                <div class="foto_de_perfil_veterano">
-                    <img class="fotos_veteranos" src="assets/icon.png" alt="Profile Picture 4">
-                    <div class="nome_do_vet"><h5>Veterano 4</h5></div>
-                </div>
+            <div class="horario_e_local">
+                <h3 id="horario_evento">Horário: 00:00 - 00:00</h3>
+                <h3 id="local_evento">Local: Local de Teste</h3>
             </div>
         </div>
-    </div>
-    <div class="botao_para_se_inscrever">
-        <button id="subscribeButton">
-            Pensando em como fazer esse botao verde quando tem vaga e quando nn tem vaga deixar ele vermelho 
-        </button>
-    </div>
-
-
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>Inscreva o membro pelo seu nome:</p>
-            <input type="text" id="memberName" placeholder="Nome do membro">
-            <button id="confirmButton">Confirmar</button>
+        <div class="parte_de_baixo_evento" id="veteranos">
+            <!-- Fotos de veteranos serão adicionadas aqui dinamicamente -->
         </div>
     </div>
+</div>
+<div class="botao_para_se_inscrever">
+    <button id="subscribeButton">
+        Pensando em como fazer esse botao verde quando tem vaga e quando não tem vaga deixar ele vermelho
+    </button>
+</div>
 
-    <script>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Inscreva o membro pelo seu nome:</p>
+        <input type="text" id="memberName" placeholder="Nome do membro">
+        <button id="confirmButton">Confirmar</button>
+    </div>
+</div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+        const eventoId = params.get('eventoId');
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const params = new URLSearchParams(window.location.search);
-            const eventoId = params.get('eventoId');
-    
-            if (eventoId) {
-                fetch(`/api/eventos/${eventoId}`)
-                    .then(response => response.json())
-                    .then(evento => {
-                        document.getElementById('titulo_projeto').textContent = evento.titulo;
-                        document.getElementById('descricao_evento').textContent = evento.descricao;
-                        document.getElementById('horario_evento').textContent = `Horário: ${evento.horarioInicio} - ${evento.horarioTermino}`;
-                        document.getElementById('local_evento').textContent = `Local: ${evento.local}`;
-    
-                        const veteranosContainer = document.getElementById('veteranos');
-                        evento.veteranos.forEach(veterano => {
-                            const veteranoDiv = document.createElement('div');
-                            veteranoDiv.classList.add('foto_de_perfil_veterano');
-                            veteranoDiv.innerHTML = `
-                                <img class="fotos_veteranos" src="${veterano.foto}" alt="Profile Picture">
-                                <div class="nome_do_vet"><h5>${veterano.nome}</h5></div>
-                            `;
-                            veteranosContainer.appendChild(veteranoDiv);
-                        });
-    
-                        // Example: Simulating availability (replace with real logic)
-                        const hasVacancy = evento.vagas > 0;
-    
-                        const subscribeButton = document.getElementById('subscribeButton');
-                        if (hasVacancy) {
-                            subscribeButton.style.backgroundColor = '#4CAF50';
-                            subscribeButton.textContent = 'Inscrever-se';
-                            subscribeButton.onmouseover = function() { this.style.backgroundColor = '#45a049'; };
-                            subscribeButton.onmouseout = function() { this.style.backgroundColor = '#4CAF50'; };
-                        } else {
-                            subscribeButton.style.backgroundColor = '#FF6347';
-                            subscribeButton.textContent = 'Sem Vagas';
-                            subscribeButton.onmouseover = function() { this.style.backgroundColor = '#e55347'; };
-                            subscribeButton.onmouseout = function() { this.style.backgroundColor = '#FF6347'; };
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching event details:', error);
-                        document.getElementById('titulo_projeto').textContent = 'Erro ao carregar os detalhes do evento';
+        if (eventoId) {
+            fetch(`/api/eventos/${eventoId}`)
+                .then(response => response.json())
+                .then(evento => {
+                    document.getElementById('titulo_projeto').textContent = evento.titulo;
+                    document.getElementById('descricao_evento').textContent = evento.descricao;
+                    document.getElementById('horario_evento').textContent = `Horário: ${evento.horarioInicio} - ${evento.horarioTermino}`;
+                    document.getElementById('local_evento').textContent = `Local: ${evento.local}`;
+
+                    const veteranosContainer = document.getElementById('veteranos');
+                    evento.membros.forEach(membro => {
+                        const veteranoDiv = document.createElement('div');
+                        veteranoDiv.classList.add('foto_de_perfil_veterano');
+                        veteranoDiv.innerHTML = `
+                            <img class="fotos_veteranos" src="${membro.foto}" alt="Profile Picture">
+                            <div class="nome_do_vet"><h5>${membro.nome}</h5></div>
+                        `;
+                        veteranosContainer.appendChild(veteranoDiv);
                     });
-            } else {
-                document.getElementById('titulo_projeto').textContent = 'ID do evento não fornecido';
-            }
-        });
 
+                    const hasVacancy = evento.vagas > 0;
 
-        // Botão de inscrição
-        const subscribeButton = document.getElementById('subscribeButton');
-
-        // Modal
-        const modal = document.getElementById('myModal');
-        const closeModal = document.getElementsByClassName('close')[0];
-
-        // Abrir o modal quando clicar no botão
-        subscribeButton.onclick = function() {
-            modal.style.display = 'block';
+                    const subscribeButton = document.getElementById('subscribeButton');
+                    if (hasVacancy) {
+                        subscribeButton.style.backgroundColor = '#4CAF50';
+                        subscribeButton.textContent = 'Inscrever-se';
+                        subscribeButton.onmouseover = function() { this.style.backgroundColor = '#45a049'; };
+                        subscribeButton.onmouseout = function() { this.style.backgroundColor = '#4CAF50'; };
+                    } else {
+                        subscribeButton.style.backgroundColor = '#FF6347';
+                        subscribeButton.textContent = 'Sem Vagas';
+                        subscribeButton.onmouseover = function() { this.style.backgroundColor = '#e55347'; };
+                        subscribeButton.onmouseout = function() { this.style.backgroundColor = '#FF6347'; };
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching event details:', error);
+                    document.getElementById('titulo_projeto').textContent = 'Erro ao carregar os detalhes do evento';
+                });
+        } else {
+            document.getElementById('titulo_projeto').textContent = 'ID do evento não fornecido';
         }
+    });
 
-        // Fechar o modal quando clicar no ícone de fechar
-        closeModal.onclick = function() {
+    // Botão de inscrição
+    const subscribeButton = document.getElementById('subscribeButton');
+
+    // Modal
+    const modal = document.getElementById('myModal');
+    const closeModal = document.getElementsByClassName('close')[0];
+
+    // Abrir o modal quando clicar no botão
+    subscribeButton.onclick = function() {
+        modal.style.display = 'block';
+    }
+
+    // Fechar o modal quando clicar no ícone de fechar
+    closeModal.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    // Fechar o modal quando clicar fora da área do modal
+    window.onclick = function(event) {
+        if (event.target === modal) {
             modal.style.display = 'none';
         }
+    }
 
-        // Fechar o modal quando clicar fora da área do modal
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        }
+    // Função para confirmar a inscrição
+    const confirmButton = document.getElementById('confirmButton');
+    const memberNameInput = document.getElementById('memberName');
 
-        // Função para confirmar a inscrição
-        const confirmButton = document.getElementById('confirmButton');
-        const memberNameInput = document.getElementById('memberName');
-
-        confirmButton.onclick = function() {
-            const memberName = memberNameInput.value;
-            alert(`Inscrição confirmada para o membro: ${memberName}`);
-            modal.style.display = 'none'; // Fecha o modal após a confirmação
-        }
-    </script>
-</div>
-</div>
-<script>container_eventos
-// Example: Simulating availability (replace with real logic)
-const hasVacancy = false; // Change this based on actual availability
-
-const subscribeButton = document.getElementById('subscribeButton');
-if (hasVacancy) {
-    subscribeButton.style.backgroundColor = '#4CAF50';
-    subscribeButton.textContent = 'Inscrever-se';
-    subscribeButton.onmouseover = function() { this.style.backgroundColor = '#45a049'; };
-    subscribeButton.onmouseout = function() { this.style.backgroundColor = '#4CAF50'; };
-} else {
-    subscribeButton.style.backgroundColor = '#FF6347'; // Red color for no vacancy
-    subscribeButton.textContent = 'Sem Vagas';
-    subscribeButton.onmouseover = function() { this.style.backgroundColor = '#e55347'; };
-    subscribeButton.onmouseout = function() { this.style.backgroundColor = '#FF6347'; };
-}
+    confirmButton.onclick = function() {
+        const memberName = memberNameInput.value;
+        alert(`Inscrição confirmada para o membro: ${memberName}`);
+        modal.style.display = 'none'; // Fecha o modal após a confirmação
+    }
 </script>
-</div>
 </body>
 </html>
