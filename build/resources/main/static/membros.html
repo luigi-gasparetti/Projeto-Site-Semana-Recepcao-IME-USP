@@ -108,6 +108,7 @@
 
         loadMembers();
 
+    let currentId = 1;
     window.addMember = function() {
         const memberName = document.getElementById('memberName').value;
         if (memberName) {
@@ -118,13 +119,14 @@
                 },
                 body: JSON.stringify({
                     nome: memberName,
-                    id: 50, // Use a unique ID for the member
+                    id: currentId, // Use a unique ID for the member
                     trabalho: 0,
                     eventos: []
                 })
             })
             .then(response => {
                 if (response.ok) {
+                    currentId++;
                     loadMembers();
                     document.getElementById('memberName').value = '';
                 } else {

@@ -16,12 +16,7 @@ fun Application.module() {
 
 // Create Membro instances
 val membros = mutableListOf(
-    Membro(nome = "João", id = 1, trabalho = 40, eventos = emptyList()),
-    Membro(nome = "Maria", id = 2, trabalho = 32, eventos = emptyList()),
-    Membro(nome = "Carlos", id = 3, trabalho = 45, eventos = emptyList()),
-    Membro(nome = "Ana", id = 4, trabalho = 28, eventos = emptyList()),
-    Membro(nome = "teste", id = 6, trabalho = 280, eventos = emptyList()),
-    Membro(nome = "teste2", id = 7, trabalho = 280, eventos = emptyList())
+    Membro(nome = "João", id = 0, trabalho = 40, eventos = emptyList()),
 )
 
 // Create Evento instances and associate Membro instances with them
