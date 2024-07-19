@@ -29,7 +29,7 @@ open class Evento(
     fun adicionarMembro(membro: Membro) {
         if (!membros.contains(membro)) {
             membros = membros + membro
-            membro.adicionarEvento(this)
+            // membro.adicionarEvento(this)
         }
     }
 
@@ -48,7 +48,7 @@ open class Membro(
     fun adicionarEvento(evento: Evento) {
         if (!eventos.contains(evento)) {
             eventos = eventos + evento
-            evento.adicionarMembro(this)
+            // evento.adicionarMembro(this)
             this.adicionarTrabalho(evento.duracao)
         }
     }
@@ -59,10 +59,8 @@ open class Membro(
 
     override fun toString(): String {
         return "Membro(nome='$nome',id'=$id, trabalho=$trabalho, eventos=${eventos.map { it.titulo }})"
-        //add id aqui se precisar
     }
 }
-
 
 /* fun main() {
     // Criando alguns membros sem eventos inicialmente
