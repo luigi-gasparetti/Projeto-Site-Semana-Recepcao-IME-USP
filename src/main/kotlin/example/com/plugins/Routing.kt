@@ -122,5 +122,24 @@ fun Application.configureRouting() {
                 call.respondText("ID inválido", status = HttpStatusCode.BadRequest)
             }
         }
+
+        delete("/api/membros/{membroId}") {
+            val membroId = call.parameters["membroId"]?.toIntOrNull()
+            if (membroId != null) {
+                val deletedRows = withContext(Dispatchers.IO) {
+                    transaction {
+                        MembrosTable.deleteWhere { MembrosTable.id eq membroId }
+                    }
+                }
+
+                if (deletedRows > 0) {
+                    call.respondText("Membro deletado com sucesso", status = HttpStatusCode.OK)
+                } else {
+                    call.respondText("Membro não encontrado", status = HttpStatusCode.NotFound)
+                }
+            } else {
+                call.respondText("ID inválido", status = HttpStatusCode.BadRequest)
+            }
+        }
     }
 }
