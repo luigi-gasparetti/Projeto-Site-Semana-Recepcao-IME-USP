@@ -5,8 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evento</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: rgb(204, 204, 204);
+        }
+        .topnav {
+            background-color: #ab2020;
+            overflow: hidden;
+        }
+        .container_eventos {
+            padding: 20px;
+        }
+        .botao_para_se_inscrever {
+            text-align: center;
+            margin: 20px;
+        }
+         .botao_para_deletar {
+             color: white;
+             text-align: center;
+             text-decoration: none;
+             font-size: 16px;
+        }
+
+        #myModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .highlight {
+            background-color: red;
+            color: white;
+        }
+    </style>
 </head>
-<body style="background-color: rgb(204, 204, 204);">
+<body>
 <div class="topnav">
     <a href="index.html">Home</a>
     <a href="membros.html">Membros</a>
@@ -29,12 +87,15 @@
         </div>
     </div>
 </div>
+
 <div class="botao_para_se_inscrever">
-    <button id="subscribeButton">
-        Pensando em como fazer esse botao verde quando tem vaga e quando não tem vaga deixar ele vermelho
-    </button>
+    <button id="subscribeButton">Inscrever membro</button>
+</div>
+<div class="botao_para_deletar">
+    <button id="deleteEventButton">Deletar evento</button>
 </div>
 
+<!-- Modal for member subscription -->
 <div id="myModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -70,9 +131,6 @@
                         `;
                         veteranosContainer.appendChild(veteranoDiv);
                     });
-
-                    // Update button based on availability
-
                 })
                 .catch(error => {
                     console.error('Error fetching event details:', error);
@@ -105,6 +163,7 @@
     const subscribeButton = document.getElementById('subscribeButton');
     const confirmButton = document.getElementById('confirmButton');
     const memberSelect = document.getElementById('memberSelect');
+    const deleteEventButton = document.getElementById('deleteEventButton');
 
     subscribeButton.onclick = function() {
         modal.style.display = 'block';
@@ -121,31 +180,52 @@
     }
 
     confirmButton.onclick = function() {
-    const memberId = memberSelect.value;
-    if (memberId) {
-        fetch(`/api/eventos/${new URLSearchParams(window.location.search).get('eventoId')}/membros/${memberId}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                alert(`Inscrição confirmada para o membro: ${memberSelect.options[memberSelect.selectedIndex].text}`);
-                modal.style.display = 'none'; // Close modal
-                location.reload(); // Refresh page to update member list
-            } else {
-                throw new Error('Erro ao adicionar membro');
-            }
-        })
-        .catch(error => {
-            console.error('Error adding member:', error);
-            alert('Erro ao adicionar membro');
-        });
-    } else {
-        alert('Por favor, selecione um membro');
+        const memberId = memberSelect.value;
+        if (memberId) {
+            fetch(`/api/eventos/${new URLSearchParams(window.location.search).get('eventoId')}/membros/${memberId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert(`Inscrição confirmada para o membro: ${memberSelect.options[memberSelect.selectedIndex].text}`);
+                    modal.style.display = 'none'; // Close modal
+                    location.reload(); // Refresh page to update member list
+                } else {
+                    throw new Error('Erro ao adicionar membro');
+                }
+            })
+            .catch(error => {
+                console.error('Error adding member:', error);
+                alert('Erro ao adicionar membro');
+            });
+        } else {
+            alert('Por favor, selecione um membro');
+        }
     }
-}
+
+    // Delete event
+    deleteEventButton.onclick = function() {
+        if (confirm('Tem certeza de que deseja deletar este evento?')) {
+            fetch(`/api/eventos/${new URLSearchParams(window.location.search).get('eventoId')}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Evento deletado com sucesso');
+                    window.location.href = 'index.html'; // Redirect to home page
+                } else {
+                    response.text().then(text => alert('Erro ao deletar evento: ' + text));
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting event:', error);
+                alert('Erro ao deletar evento');
+            });
+        }
+    }
 </script>
 </body>
 </html>
