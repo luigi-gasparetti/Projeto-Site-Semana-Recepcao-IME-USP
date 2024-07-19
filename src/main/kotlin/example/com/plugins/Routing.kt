@@ -44,12 +44,36 @@ fun Application.configureRouting() {
             }
         }
 
+        get("/api/membros") {
+            println("Received GET request at /api/membros")
+            withContext(Dispatchers.IO) {
+                val membros = transaction {
+                    MembrosTable.selectAll().map {
+                        Membro(
+                            id = it[MembrosTable.id],
+                            nome =  it[MembrosTable.nome],
+                            trabalho = it[MembrosTable.trabalho],
+                            eventos = emptyList()
+                        )
+                    }
+                }
+                call.respond(membros)
+            }
+        }
+
 
         post("/api/eventos") {
             val newEvento = call.receive<Evento>()
             addEvento(newEvento.titulo, newEvento.descricao, newEvento.duracao, newEvento.horarioInicio, newEvento.horarioTermino, newEvento.diaDaSemana)
             call.respondText("Evento adicionado com sucesso", status = HttpStatusCode.Created)
         }
+
+        post("/api/membros") {
+            val newMembro = call.receive<Membro>()
+            addMembro(newMembro.nome, newMembro.trabalho)
+            call.respondText("Membro adicionado com sucesso", status = HttpStatusCode.Created)
+        }
+
 
         get("/api/eventos/{eventoId}") {
             val eventoId = call.parameters["eventoId"]?.toIntOrNull()
