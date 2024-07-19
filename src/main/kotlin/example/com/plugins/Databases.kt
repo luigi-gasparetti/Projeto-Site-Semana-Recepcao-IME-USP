@@ -1,84 +1,92 @@
-package example.com.plugins
+package example.com
 
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import java.sql.*
-import kotlinx.coroutines.*
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
+
+object MembrosTable : Table() {
+    val id = integer("id").autoIncrement()
+    val nome = varchar("nome", 50)
+    val trabalho = integer("trabalho")
+    override val primaryKey = PrimaryKey(id)
+}
+
+object EventosTable : Table() {
+    val id = integer("id").autoIncrement()
+    val titulo = varchar("titulo", 50)
+    val descricao = varchar("descricao", 255)
+    val duracao = integer("duracao")
+    val horarioInicio = varchar("horarioInicio", 5)
+    val horarioTermino = varchar("horarioTermino", 5)
+    val diaDaSemana = varchar("diaDaSemana", 15)
+    override val primaryKey = PrimaryKey(id)
+}
+
+object EventoMembroTable : Table() {
+    val eventoId = integer("eventoId").references(EventosTable.id)
+    val membroId = integer("membroId").references(MembrosTable.id)
+}
 
 fun Application.configureDatabases() {
-    val dbConnection: Connection = connectToPostgres(embedded = true)
-    val cityService = CityService(dbConnection)
-    
-    routing {
-    
-        // Create city
-        post("/cities") {
-            val city = call.receive<City>()
-            val id = cityService.create(city)
-            call.respond(HttpStatusCode.Created, id)
-        }
-    
-        // Read city
-        get("/cities/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            try {
-                val city = cityService.read(id)
-                call.respond(HttpStatusCode.OK, city)
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.NotFound)
-            }
-        }
-    
-        // Update city
-        put("/cities/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            val user = call.receive<City>()
-            cityService.update(id, user)
-            call.respond(HttpStatusCode.OK)
-        }
-    
-        // Delete city
-        delete("/cities/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            cityService.delete(id)
-            call.respond(HttpStatusCode.OK)
+    val url = "jdbc:postgresql://localhost:5432/comisys"
+    val driver = "org.postgresql.Driver"
+    val user = "luigi"
+    val password = "senha"
+
+    Database.connect(url, driver = driver, user = user, password = password)
+
+    transaction {
+        SchemaUtils.create(MembrosTable, EventosTable, EventoMembroTable)
+    }
+}
+
+fun addMembro(nome: String, trabalho: Int) {
+    transaction {
+        MembrosTable.insert {
+            it[MembrosTable.nome] = nome
+            it[MembrosTable.trabalho] = trabalho
         }
     }
 }
 
-/**
- * Makes a connection to a Postgres database.
- *
- * In order to connect to your running Postgres process,
- * please specify the following parameters in your configuration file:
- * - postgres.url -- Url of your running database process.
- * - postgres.user -- Username for database connection
- * - postgres.password -- Password for database connection
- *
- * If you don't have a database process running yet, you may need to [download]((https://www.postgresql.org/download/))
- * and install Postgres and follow the instructions [here](https://postgresapp.com/).
- * Then, you would be able to edit your url,  which is usually "jdbc:postgresql://host:port/database", as well as
- * user and password values.
- *
- *
- * @param embedded -- if [true] defaults to an embedded database for tests that runs locally in the same process.
- * In this case you don't have to provide any parameters in configuration file, and you don't have to run a process.
- *
- * @return [Connection] that represent connection to the database. Please, don't forget to close this connection when
- * your application shuts down by calling [Connection.close]
- * */
-fun Application.connectToPostgres(embedded: Boolean): Connection {
-    Class.forName("org.postgresql.Driver")
-    if (embedded) {
-        return DriverManager.getConnection("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "root", "")
-    } else {
-        val url = environment.config.property("postgres.url").getString()
-        val user = environment.config.property("postgres.user").getString()
-        val password = environment.config.property("postgres.password").getString()
+fun addEvento(titulo: String, descricao: String, duracao: Int, horarioInicio: String, horarioTermino: String, diaDaSemana: String) {
+    transaction {
+        EventosTable.insert {
+            it[EventosTable.titulo] = titulo
+            it[EventosTable.descricao] = descricao
+            it[EventosTable.duracao] = duracao
+            it[EventosTable.horarioInicio] = horarioInicio
+            it[EventosTable.horarioTermino] = horarioTermino
+            it[EventosTable.diaDaSemana] = diaDaSemana
+        }
+    }
+}
 
-        return DriverManager.getConnection(url, user, password)
+fun initializeDatabase() {
+    transaction {
+        // Check if the tables are empty before inserting
+        if (MembrosTable.selectAll().empty()) {
+            // Insert initial members
+            MembrosTable.insert {
+                it[nome] = "João"
+                it[trabalho] = 40
+            }
+            MembrosTable.insert {
+                it[nome] = "Maria"
+                it[trabalho] = 30
+            }
+        }
+
+        if (EventosTable.selectAll().empty()) {
+            // Insert initial events
+            EventosTable.insert {
+                it[titulo] = "Reunião de Planejamento"
+                it[descricao] = "Discussão sobre planejamento semanal"
+                it[duracao] = 90
+                it[horarioInicio] = "09:00"
+                it[horarioTermino] = "10:30"
+                it[diaDaSemana] = "Segunda-feira"
+            }
+        }
     }
 }

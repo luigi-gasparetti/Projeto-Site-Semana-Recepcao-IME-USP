@@ -1,52 +1,74 @@
 package example.com
 
 import io.ktor.server.application.*
-import io.ktor.server.http.content.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.response.*
 import io.ktor.server.request.*
 import io.ktor.http.*
+import io.ktor.server.*
 import org.jetbrains.exposed.sql.*
-
-
-
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.SchemaUtils.create
-import org.jetbrains.exposed.sql.SchemaUtils.drop
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import io.ktor.server.application.*
+import io.ktor.server.http.content.*
+import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     routing {
-        staticResources("static", "static")
-
-
-
-
-
+        static("/static") {
+            resources("static")
+        }
+        // Redireciona a rota raiz para o arquivo estático index.html
         get("/") {
-        call.respondRedirect("/static/index.html")
+            call.respondRedirect("/static/index.html")
         }
 
+        // Rotas da API
         get("/api/eventos") {
-            call.respond(eventos)
+            withContext(Dispatchers.IO) {
+                val eventos = transaction {
+                    EventosTable.selectAll().map {
+                        Evento(
+                            id = it[EventosTable.id],
+                            titulo = it[EventosTable.titulo],
+                            descricao = it[EventosTable.descricao],
+                            duracao = it[EventosTable.duracao],
+                            horarioInicio = it[EventosTable.horarioInicio],
+                            horarioTermino = it[EventosTable.horarioTermino],
+                            diaDaSemana = it[EventosTable.diaDaSemana],
+                            membros = emptyList()
+                        )
+                    }
+                }
+                call.respond(eventos)
+            }
         }
-
-        get("/api/membros") {
-            call.respond(membros)
-        }
-
 
         post("/api/eventos") {
-                val newEvento = call.receive<Evento>()
-                eventos.add(newEvento)
-                call.respondText("Evento adicionado com sucesso", status = HttpStatusCode.Created)
+            val newEvento = call.receive<Evento>()
+            addEvento(newEvento.titulo, newEvento.descricao, newEvento.duracao, newEvento.horarioInicio, newEvento.horarioTermino, newEvento.diaDaSemana)
+            call.respondText("Evento adicionado com sucesso", status = HttpStatusCode.Created)
         }
 
         get("/api/eventos/{eventoId}") {
             val eventoId = call.parameters["eventoId"]?.toIntOrNull()
-
-            if (eventoId != null && eventoId >= 0) {
-                val evento = findEventoById(eventos, eventoId)
+            if (eventoId != null) {
+                val evento = withContext(Dispatchers.IO) {
+                    transaction {
+                        EventosTable.select { EventosTable.id eq eventoId }.singleOrNull()?.let {
+                            Evento(
+                                id = it[EventosTable.id],
+                                titulo = it[EventosTable.titulo],
+                                descricao = it[EventosTable.descricao],
+                                duracao = it[EventosTable.duracao],
+                                horarioInicio = it[EventosTable.horarioInicio],
+                                horarioTermino = it[EventosTable.horarioTermino],
+                                diaDaSemana = it[EventosTable.diaDaSemana]
+                            )
+                        }
+                    }
+                }
 
                 if (evento != null) {
                     call.respond(evento)
@@ -60,9 +82,14 @@ fun Application.configureRouting() {
 
         delete("/api/eventos/{eventoId}") {
             val eventoId = call.parameters["eventoId"]?.toIntOrNull()
-            if (eventoId != null && eventoId >= 0) {
-                val eventoRemoved = eventos.removeIf { it.id == eventoId }
-                if (eventoRemoved) {
+            if (eventoId != null) {
+                val deletedRows = withContext(Dispatchers.IO) {
+                    transaction {
+                        EventosTable.deleteWhere { EventosTable.id eq eventoId }
+                    }
+                }
+
+                if (deletedRows > 0) {
                     call.respondText("Evento deletado com sucesso", status = HttpStatusCode.OK)
                 } else {
                     call.respondText("Evento não encontrado", status = HttpStatusCode.NotFound)
@@ -71,98 +98,5 @@ fun Application.configureRouting() {
                 call.respondText("ID inválido", status = HttpStatusCode.BadRequest)
             }
         }
-
-        get("/api/membros") {
-            call.respond(membros)
-        }
-
-        post("/api/membros") {
-            val newMember = call.receive<Membro>()
-            println("Received member: $newMember")
-            membros.add(newMember)
-            call.respondText("Membro adicionado com sucesso", status = HttpStatusCode.Created)
-        }
-
-        delete("/api/membros/{nome}") {
-            val nome = call.parameters["nome"]
-            if (nome != null) {
-                val membroRemoved = membros.removeIf { it.nome == nome }
-                if (membroRemoved) {
-                    call.respondText("Membro deletado com sucesso", status = HttpStatusCode.OK)
-                } else {
-                    call.respondText("Membro não encontrado", status = HttpStatusCode.NotFound)
-                }
-            } else {
-                call.respondText("Nome do membro é necessário", status = HttpStatusCode.BadRequest)
-            }
-        }
-
-        get("/api/eventos/{eventoId}/membros") {
-            val eventoId = call.parameters["eventoId"]?.toIntOrNull()
-            if (eventoId != null) {
-                val evento = findEventoById(eventos, eventoId)
-                if (evento != null) {
-                    call.respond(evento.membros)
-                } else {
-                    call.respondText("Evento não encontrado", status = HttpStatusCode.NotFound)
-                }
-            } else {
-                call.respondText("ID de evento inválido", status = HttpStatusCode.BadRequest)
-            }
-        }
-
-
-
-
-        patch("/api/eventos/{eventoId}/membros/{membroId}") {
-            val eventoId = call.parameters["eventoId"]?.toIntOrNull()
-            val membroId = call.parameters["membroId"]?.toIntOrNull()
-
-            if (eventoId != null && membroId != null) {
-                val evento = eventos.find { it.id == eventoId }
-                val membro = membros.find { it.id == membroId }
-
-                if (evento != null) {
-                    if (membro != null) {
-                        evento.adicionarMembro(membro)
-                        membro.adicionarEvento(evento)
-                        call.respondText("Membro adicionado ao evento com sucesso", status = HttpStatusCode.OK)
-                    } else {
-                        call.respondText("Membro não encontrado", status = HttpStatusCode.NotFound)
-                    }
-                } else {
-                    call.respondText("Evento não encontrado", status = HttpStatusCode.NotFound)
-                }
-            } else {
-                call.respondText("ID de evento ou membro inválido", status = HttpStatusCode.BadRequest)
-            }
-        }
-
-
-
-
-        // Remove a member from a specific event
-        delete("/api/eventos/{eventoId}/membros/{memberName}") {
-            val eventoId = call.parameters["eventoId"]?.toIntOrNull()
-            val memberName = call.parameters["memberName"]
-
-            if (eventoId != null && memberName != null) {
-                val evento = eventos.find { it.id == eventoId }
-                val membro = membros.find { it.nome == memberName }
-
-                if (evento != null && membro != null) {
-                    evento.membros = evento.membros.filter { it.nome != memberName }
-                    membro.eventos = membro.eventos.filter { it.id != eventoId }
-                    call.respondText("Membro removido com sucesso", status = HttpStatusCode.OK)
-                } else {
-                    call.respond(HttpStatusCode.NotFound, "Evento ou membro não encontrado")
-                }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "ID do evento ou nome do membro inválido")
-            }
-        }
-
     }
-
 }
-

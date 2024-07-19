@@ -23,8 +23,8 @@ open class Evento(
     val duracao: Int, // duração em minutos
     val horarioInicio: String,
     val horarioTermino: String,
-    val diaDaSemana: DiaDaSemana,
-    var membros: List<Membro>
+    val diaDaSemana: String,
+    var membros: List<Membro> = emptyList()
 ) {
     fun adicionarMembro(membro: Membro) {
         if (!membros.contains(membro)) {
@@ -43,7 +43,7 @@ open class Membro(
     val nome: String, // nome do membro
     val id: Int,
     var trabalho: Int, // duração de horas trabalhadas em minutos
-    var eventos: List<Evento>
+    var eventos: List<Evento> = emptyList()
 ) {
     fun adicionarEvento(evento: Evento) {
         if (!eventos.contains(evento)) {
