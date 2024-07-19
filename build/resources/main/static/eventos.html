@@ -72,15 +72,7 @@
                     });
 
                     // Update button based on availability
-                    const hasVacancy = evento.vagas > 0;
-                    const subscribeButton = document.getElementById('subscribeButton');
-                    if (hasVacancy) {
-                        subscribeButton.style.backgroundColor = '#4CAF50';
-                        subscribeButton.textContent = 'Inscrever-se';
-                    } else {
-                        subscribeButton.style.backgroundColor = '#FF6347';
-                        subscribeButton.textContent = 'Sem Vagas';
-                    }
+
                 })
                 .catch(error => {
                     console.error('Error fetching event details:', error);
