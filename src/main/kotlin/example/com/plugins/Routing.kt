@@ -6,6 +6,14 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.request.*
 import io.ktor.http.*
+import org.jetbrains.exposed.sql.*
+
+
+
+import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.SchemaUtils.create
+import org.jetbrains.exposed.sql.SchemaUtils.drop
+
 
 fun Application.configureRouting() {
     routing {
