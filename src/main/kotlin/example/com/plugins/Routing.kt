@@ -80,15 +80,29 @@ fun Application.configureRouting() {
             if (eventoId != null) {
                 val evento = withContext(Dispatchers.IO) {
                     transaction {
-                        EventosTable.select { EventosTable.id eq eventoId }.singleOrNull()?.let {
+                        val eventoRecord = EventosTable.select { EventosTable.id eq eventoId }.singleOrNull()
+                        eventoRecord?.let { record ->
+                            val membrosAssociados = EventoMembroTable
+                                .innerJoin(MembrosTable)
+                                .select { EventoMembroTable.eventoId eq eventoId }
+                                .map {
+                                    Membro(
+                                        id = it[MembrosTable.id],
+                                        nome = it[MembrosTable.nome],
+                                        trabalho = it[MembrosTable.trabalho],
+                                        eventos = emptyList()
+                                    )
+                                }
+
                             Evento(
-                                id = it[EventosTable.id],
-                                titulo = it[EventosTable.titulo],
-                                descricao = it[EventosTable.descricao],
-                                duracao = it[EventosTable.duracao],
-                                horarioInicio = it[EventosTable.horarioInicio],
-                                horarioTermino = it[EventosTable.horarioTermino],
-                                diaDaSemana = it[EventosTable.diaDaSemana]
+                                id = record[EventosTable.id],
+                                titulo = record[EventosTable.titulo],
+                                descricao = record[EventosTable.descricao],
+                                duracao = record[EventosTable.duracao],
+                                horarioInicio = record[EventosTable.horarioInicio],
+                                horarioTermino = record[EventosTable.horarioTermino],
+                                diaDaSemana = record[EventosTable.diaDaSemana],
+                                membros = membrosAssociados
                             )
                         }
                     }
@@ -104,11 +118,13 @@ fun Application.configureRouting() {
             }
         }
 
+
         delete("/api/eventos/{eventoId}") {
             val eventoId = call.parameters["eventoId"]?.toIntOrNull()
             if (eventoId != null) {
                 val deletedRows = withContext(Dispatchers.IO) {
                     transaction {
+                        EventoMembroTable.deleteWhere { EventoMembroTable.eventoId eq eventoId  }
                         EventosTable.deleteWhere { EventosTable.id eq eventoId }
                     }
                 }
@@ -128,6 +144,10 @@ fun Application.configureRouting() {
             if (membroId != null) {
                 val deletedRows = withContext(Dispatchers.IO) {
                     transaction {
+                        // Remover todas as referências do membro na tabela associativa
+                        EventoMembroTable.deleteWhere { EventoMembroTable.membroId eq membroId }
+
+                        // Agora, remover o membro
                         MembrosTable.deleteWhere { MembrosTable.id eq membroId }
                     }
                 }
@@ -139,6 +159,30 @@ fun Application.configureRouting() {
                 }
             } else {
                 call.respondText("ID inválido", status = HttpStatusCode.BadRequest)
+            }
+        }
+
+        patch("/api/eventos/{eventoId}/membros/{membroId}") {
+            val eventoId = call.parameters["eventoId"]?.toIntOrNull()
+            val membroId = call.parameters["membroId"]?.toIntOrNull()
+
+            if (eventoId != null && membroId != null) {
+                try {
+                    withContext(Dispatchers.IO) {
+                        transaction {
+                            EventoMembroTable.insert {
+                                it[EventoMembroTable.eventoId] = eventoId
+                                it[EventoMembroTable.membroId] = membroId
+                            }
+                        }
+                    }
+                    call.respondText("Membro adicionado ao evento com sucesso", status = HttpStatusCode.OK)
+
+                } catch (e: Exception) {
+                    call.respondText("Erro ao adicionar membro ao evento: ${e.message}", status = HttpStatusCode.InternalServerError)
+                }
+            } else {
+                call.respondText("ID de evento ou membro inválido", status = HttpStatusCode.BadRequest)
             }
         }
     }

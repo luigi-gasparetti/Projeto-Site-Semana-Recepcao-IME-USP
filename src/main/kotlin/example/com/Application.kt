@@ -19,13 +19,12 @@ fun Application.module() {
     configureSerialization()
     configureDatabases()
     configureRouting()
-
 }
 
 // Create Membro instances
-val membros = mutableListOf(
+/* val membros = mutableListOf(
     Membro(nome = "João", id = 0, trabalho = 40, eventos = emptyList()),
-)
+) */
 
 
 

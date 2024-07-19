@@ -5,64 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evento</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            background-color: rgb(204, 204, 204);
-        }
-        .topnav {
-            background-color: #ab2020;
-            overflow: hidden;
-        }
-        .container_eventos {
-            padding: 20px;
-        }
-        .botao_para_se_inscrever {
-            text-align: center;
-            margin: 20px;
-        }
-         .botao_para_deletar {
-             color: white;
-             text-align: center;
-             text-decoration: none;
-             font-size: 16px;
-        }
-
-        #myModal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .highlight {
-            background-color: red;
-            color: white;
-        }
-    </style>
 </head>
 <body>
 <div class="topnav">
@@ -82,8 +24,9 @@
                 <h3 id="horario_evento">Horário: 00:00 - 00:00</h3>
             </div>
         </div>
-        <div class="parte_de_baixo_evento" id="veteranos">
-            <!-- Fotos de veteranos serão adicionadas aqui dinamicamente -->
+        <div class="parte_de_membros_evento" id="membros">
+            <h3>Membros Participantes</h3>
+            <!-- Lista de membros participantes será adicionada aqui dinamicamente -->
         </div>
     </div>
 </div>
@@ -120,16 +63,15 @@
                     document.getElementById('descricao_evento').textContent = evento.descricao;
                     document.getElementById('horario_evento').textContent = `Horário: ${evento.horarioInicio} - ${evento.horarioTermino}`;
 
-                    const veteranosContainer = document.getElementById('veteranos');
-                    veteranosContainer.innerHTML = ''; // Clear existing members
+                    const membrosContainer = document.getElementById('membros');
+                    membrosContainer.innerHTML = ''; // Clear existing members
                     evento.membros.forEach(membro => {
-                        const veteranoDiv = document.createElement('div');
-                        veteranoDiv.classList.add('foto_de_perfil_veterano');
-                        veteranoDiv.innerHTML = `
-                            <img class="fotos_veteranos" src="${membro.foto}" alt="Profile Picture">
-                            <div class="nome_do_vet"><h5>${membro.nome}</h5></div>
+                        const membroDiv = document.createElement('div');
+                        membroDiv.classList.add('membro_participante');
+                        membroDiv.innerHTML = `
+                            <div class="nome_do_membro"><h5>${membro.nome}</h5></div>
                         `;
-                        veteranosContainer.appendChild(veteranoDiv);
+                        membrosContainer.appendChild(membroDiv);
                     });
                 })
                 .catch(error => {
