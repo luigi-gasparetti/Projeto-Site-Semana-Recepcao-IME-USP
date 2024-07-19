@@ -398,6 +398,15 @@ button:hover {
     background-color: #4d9f9a;
 }
 
+.parte_de_membros_evento{
+    color:white;
+}
+
+.parte_de_membros_evento:hover{
+    color: #af4f4f;
+
+}
+
  body {
             background-color: rgb(204, 204, 204);
         }

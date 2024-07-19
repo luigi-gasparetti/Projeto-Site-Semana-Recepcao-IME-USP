@@ -165,14 +165,32 @@ fun Application.configureRouting() {
         patch("/api/eventos/{eventoId}/membros/{membroId}") {
             val eventoId = call.parameters["eventoId"]?.toIntOrNull()
             val membroId = call.parameters["membroId"]?.toIntOrNull()
-
             if (eventoId != null && membroId != null) {
                 try {
                     withContext(Dispatchers.IO) {
                         transaction {
-                            EventoMembroTable.insert {
-                                it[EventoMembroTable.eventoId] = eventoId
-                                it[EventoMembroTable.membroId] = membroId
+                            // Verificar se o evento existe
+                            val evento = EventosTable.select { EventosTable.id eq eventoId }.singleOrNull()
+                            if (evento != null) {
+                                // Inserir o membro no evento
+                                EventoMembroTable.insert {
+                                    it[EventoMembroTable.eventoId] = eventoId
+                                    it[EventoMembroTable.membroId] = membroId
+                                }
+
+                                // Atualizar a duração do trabalho do membro
+                                val duracao = evento[EventosTable.duracao] ?: 0
+                                val membroAtual = MembrosTable.select { MembrosTable.id eq membroId }.singleOrNull()
+                                if (membroAtual != null) {
+                                    val trabalhoAtual = membroAtual[MembrosTable.trabalho] ?: 0
+                                    MembrosTable.update({ MembrosTable.id eq membroId }) {
+                                        it[MembrosTable.trabalho] = trabalhoAtual + duracao
+                                    }
+                                } else {
+                                    throw IllegalArgumentException("Membro não encontrado")
+                                }
+                            } else {
+                                throw IllegalArgumentException("Evento não encontrado")
                             }
                         }
                     }
@@ -185,5 +203,9 @@ fun Application.configureRouting() {
                 call.respondText("ID de evento ou membro inválido", status = HttpStatusCode.BadRequest)
             }
         }
+
+
+
+
     }
 }
