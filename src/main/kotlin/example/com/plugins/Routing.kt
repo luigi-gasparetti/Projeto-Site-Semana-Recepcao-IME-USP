@@ -16,9 +16,7 @@ import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
     routing {
-        static("/static") {
-            resources("static")
-        }
+        staticResources("/static", "static")
         // Redireciona a rota raiz para o arquivo estático index.html
         get("/") {
             call.respondRedirect("/static/index.html")
@@ -26,6 +24,7 @@ fun Application.configureRouting() {
 
         // Rotas da API
         get("/api/eventos") {
+            println("Received GET request at /api/eventos")
             withContext(Dispatchers.IO) {
                 val eventos = transaction {
                     EventosTable.selectAll().map {
@@ -44,6 +43,7 @@ fun Application.configureRouting() {
                 call.respond(eventos)
             }
         }
+
 
         post("/api/eventos") {
             val newEvento = call.receive<Evento>()

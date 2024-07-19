@@ -85,7 +85,7 @@ fun initializeDatabase() {
                 it[duracao] = 90
                 it[horarioInicio] = "09:00"
                 it[horarioTermino] = "10:30"
-                it[diaDaSemana] = "Segunda-feira"
+                it[diaDaSemana] = "SEGUNDA"
             }
         }
     }

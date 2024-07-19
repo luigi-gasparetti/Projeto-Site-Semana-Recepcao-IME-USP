@@ -61,42 +61,44 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const daysOfWeek = ["SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA"];
-        const eventContainer = document.getElementById('event-container');
-        const daysMap = new Map();
+    const daysOfWeek = ["SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA"];
+    const eventContainer = document.getElementById('event-container'); // Certifique-se de que o ID está correto
+    const daysMap = new Map();
 
-        // Initialize empty columns for each day of the week
-        daysOfWeek.forEach(day => {
-            const eventCol = document.createElement('div');
-            eventCol.classList.add('prog-col');
-            const eventHeader = document.createElement('div');
-            eventHeader.classList.add('prog-header');
-            eventHeader.innerHTML = `<span class="prog-header-text">${day}</span>`;
-            eventCol.appendChild(eventHeader);
-            eventContainer.appendChild(eventCol);
-            daysMap.set(day, eventCol);
-        });
-
-        fetch('/api/eventos')
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(evento => {
-                    const eventCol = daysMap.get(evento.diaDaSemana);
-
-                    const eventItem = document.createElement('div');
-                    eventItem.classList.add('prog-item');
-                    eventItem.innerHTML = `
-                        <span class="item-header">${evento.titulo}</span>
-                        <span class="item-content">${evento.horarioInicio} - ${evento.horarioTermino} - ${evento.descricao}</span>
-                    `;
-                    eventItem.addEventListener('click', () => {
-                        window.location.href = `eventos.html?eventoId=${evento.id}`;
-                    });
-                    eventCol.appendChild(eventItem);
-                });
-            })
-            .catch(error => console.error('Error fetching event data:', error));
+    // Initialize empty columns for each day of the week
+    daysOfWeek.forEach(day => {
+        const eventCol = document.createElement('div');
+        eventCol.classList.add('prog-col');
+        const eventHeader = document.createElement('div');
+        eventHeader.classList.add('prog-header');
+        eventHeader.innerHTML = `<span class="prog-header-text">${day}</span>`;
+        eventCol.appendChild(eventHeader);
+        eventContainer.appendChild(eventCol);
+        daysMap.set(day, eventCol);
     });
+
+    fetch('/api/eventos')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(evento => {
+                const eventCol = daysMap.get(evento.diaDaSemana.toString());
+
+                const eventItem = document.createElement('div');
+                eventItem.classList.add('prog-item');
+                eventItem.innerHTML = `
+                    <span class="item-header">${evento.titulo}</span>
+                    <span class="item-content">${evento.horarioInicio} - ${evento.horarioTermino} - ${evento.descricao}</span>
+                `;
+                eventItem.addEventListener('click', () => {
+                    window.location.href = `eventos.html?eventoId=${evento.id}`;
+                });
+                eventCol.appendChild(eventItem);
+            });
+        })
+        .catch(error => console.error('Error fetching event data:', error));
+    // Restante do código
+});
+
 
     const modal = document.getElementById("addEventModal");
     const btn = document.getElementById("addEventButton");
