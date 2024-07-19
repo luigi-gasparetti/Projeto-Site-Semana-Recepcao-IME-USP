@@ -104,6 +104,8 @@ fun Application.configureRouting() {
         }
 
 
+
+
         patch("/api/eventos/{eventoId}/membros/{membroId}") {
             val eventoId = call.parameters["eventoId"]?.toIntOrNull()
             val membroId = call.parameters["membroId"]?.toIntOrNull()
