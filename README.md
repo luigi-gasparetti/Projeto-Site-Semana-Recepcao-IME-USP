@@ -5,4 +5,10 @@ A funcionalidade mais interessante do site seria a organização dos membros da 
 
 Além da maior segurança, o site também ajudará na organização mais generalizada da semana de recepção, providenciando aos calouros um cronograma completo das atividades da semana. Além do cronograma, toda atividade listada contará tanto com suas informações essenciais como local e horário quanto com uma descrição do que se trata aquela atividade.
 
+Compile com:
+
+````bash
+./gradlew build
+````
+
 ## LER ARQUIVO CICLOS.md ##
